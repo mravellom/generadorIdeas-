@@ -1,0 +1,46 @@
+<div class="dashboard">
+  <div class="header">
+    <h1>Dead Startups</h1>
+    <p class="subtitle">{{ ideas.length }} ideas en la base de datos</p>
+  </div>
+
+  <div class="filters">
+    <button [class.active]="filter === 'all'" (click)="setFilter('all')">Todas</button>
+    <button [class.active]="filter === 'analyzed'" (click)="setFilter('analyzed')">Analizadas</button>
+    <button [class.active]="filter === 'top'" (click)="setFilter('top')">Top Oportunidades</button>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Cargando ideas...</div>
+  } @else {
+    <div class="ideas-grid">
+      @for (idea of ideas; track idea.id) {
+        <a class="idea-card" [routerLink]="['/idea', idea.id]">
+          <div class="card-header">
+            <h3>{{ idea.name }}</h3>
+            @if (idea.analysis?.total_score) {
+              <span class="badge" [class]="getScoreBadgeClass(idea.analysis?.total_score)">
+                {{ idea.analysis!.total_score }}/20
+              </span>
+            }
+          </div>
+          <p class="description">{{ idea.description }}</p>
+          <div class="card-footer">
+            @if (idea.industry) {
+              <span class="tag">{{ idea.industry }}</span>
+            }
+            @if (idea.year) {
+              <span class="year">{{ idea.year }}</span>
+            }
+            @if (idea.analysis) {
+              <span class="status analyzed">Analizada</span>
+            }
+            @if (idea.execution) {
+              <span class="status executed">MVP Plan</span>
+            }
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,130 @@
+@if (loading) {
+  <div class="loading">Cargando...</div>
+} @else if (idea) {
+  <div class="detail">
+    <div class="detail-header">
+      <div>
+        <h1>{{ idea.name }}</h1>
+        <p class="meta">
+          @if (idea.industry) { <span class="tag">{{ idea.industry }}</span> }
+          @if (idea.year) { <span class="year">Fundada en {{ idea.year }}</span> }
+        </p>
+      </div>
+      @if (idea.analysis?.total_score) {
+        <div class="score-circle">
+          <span class="score-value">{{ idea.analysis!.total_score }}</span>
+          <span class="score-label">/20</span>
+        </div>
+      }
+    </div>
+
+    <div class="section">
+      <h2>Descripcion</h2>
+      <p>{{ idea.description }}</p>
+    </div>
+
+    @if (idea.failure_reason) {
+      <div class="section">
+        <h2>Razon de Fallo</h2>
+        <p>{{ idea.failure_reason }}</p>
+      </div>
+    }
+
+    <!-- ANALYSIS -->
+    @if (!idea.analysis) {
+      <div class="section action-section">
+        <h2>Analisis IA</h2>
+        <p class="hint">Analiza esta startup con IA para detectar oportunidades</p>
+        <button class="btn-primary" (click)="analyze()" [disabled]="analyzing">
+          {{ analyzing ? 'Analizando...' : 'Analizar con IA' }}
+        </button>
+      </div>
+    } @else {
+      <div class="section">
+        <h2>Analisis IA</h2>
+
+        <div class="analysis-grid">
+          <div class="analysis-item">
+            <label>Problema Real</label>
+            <p>{{ idea.analysis.problem }}</p>
+          </div>
+          <div class="analysis-item">
+            <label>Tipo de Fallo</label>
+            <span class="tag failure-tag">{{ idea.analysis.failure_type }}</span>
+          </div>
+          <div class="analysis-item">
+            <label>Oportunidad Actual</label>
+            <span class="tag opportunity-tag"
+              [class.high]="idea.analysis.current_opportunity === 'alta'"
+              [class.medium]="idea.analysis.current_opportunity === 'media'"
+              [class.low]="idea.analysis.current_opportunity === 'baja'">
+              {{ idea.analysis.current_opportunity }}
+            </span>
+          </div>
+        </div>
+
+        <div class="scores">
+          <div class="score-bar">
+            <label>Dolor del Problema</label>
+            <div class="bar"><div class="fill" [style.width.%]="getScoreWidth(idea.analysis.pain_score)"></div></div>
+            <span>{{ idea.analysis.pain_score }}/5</span>
+          </div>
+          <div class="score-bar">
+            <label>Capacidad de Pago</label>
+            <div class="bar"><div class="fill" [style.width.%]="getScoreWidth(idea.analysis.paying_capacity)"></div></div>
+            <span>{{ idea.analysis.paying_capacity }}/5</span>
+          </div>
+          <div class="score-bar">
+            <label>Facilidad MVP</label>
+            <div class="bar"><div class="fill" [style.width.%]="getScoreWidth(idea.analysis.mvp_ease)"></div></div>
+            <span>{{ idea.analysis.mvp_ease }}/5</span>
+          </div>
+          <div class="score-bar">
+            <label>Ventaja Tecnologica</label>
+            <div class="bar"><div class="fill" [style.width.%]="getScoreWidth(idea.analysis.tech_advantage)"></div></div>
+            <span>{{ idea.analysis.tech_advantage }}/5</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- EXECUTION -->
+    @if (idea.analysis && !idea.execution) {
+      <div class="section action-section">
+        <h2>Plan de Ejecucion</h2>
+        <p class="hint">Genera un plan MVP concreto para esta oportunidad</p>
+        <button class="btn-primary" (click)="generateExecution()" [disabled]="generating">
+          {{ generating ? 'Generando...' : 'Generar MVP Plan' }}
+        </button>
+      </div>
+    } @else if (idea.execution) {
+      <div class="section">
+        <h2>Plan de Ejecucion MVP</h2>
+        <div class="execution-grid">
+          <div class="exec-item">
+            <label>Plan MVP</label>
+            <p class="plan-text">{{ idea.execution.mvp_plan }}</p>
+          </div>
+          <div class="exec-item">
+            <label>Stack Sugerido</label>
+            <p>{{ idea.execution.stack }}</p>
+          </div>
+          <div class="exec-item">
+            <label>Monetizacion</label>
+            <p>{{ idea.execution.monetization }}</p>
+          </div>
+          <div class="exec-item">
+            <label>Tiempo Estimado</label>
+            <p class="days">{{ idea.execution.estimated_days }} dias</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (idea.source_url) {
+      <div class="section">
+        <a [href]="idea.source_url" target="_blank" class="source-link">Ver en startups.rip</a>
+      </div>
+    }
+  </div>
+}

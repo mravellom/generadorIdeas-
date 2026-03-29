@@ -1,0 +1,11 @@
+<nav class="navbar">
+  <a class="navbar-brand" routerLink="/dashboard">Opportunity Engine</a>
+  <div class="navbar-actions">
+    <button (click)="runScraper()" [disabled]="scraping">
+      {{ scraping ? 'Scraping...' : 'Run Scraper' }}
+    </button>
+    @if (scraperMessage) {
+      <span class="scraper-msg">{{ scraperMessage }}</span>
+    }
+  </div>
+</nav>
