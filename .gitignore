@@ -1,0 +1,43 @@
+# Python / FastAPI
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+.env
+*.log
+
+# Angular / Node
+node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.sass-cache/
+*.js.map
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+
+# PostgreSQL
+*.sql.bak
+
+# Coverage / Testing
+.coverage
+htmlcov/
+.pytest_cache/
+coverage/
