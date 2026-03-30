@@ -10,7 +10,7 @@ app = FastAPI(title="Opportunity Engine", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
+    allow_origins=["http://localhost:4200", "http://localhost"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
