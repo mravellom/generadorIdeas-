@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.scraper.startups_rip import scrape_startups_rip
 
-router = APIRouter(prefix="/scraper", tags=["scraper"])
+router = APIRouter(prefix="/api/scraper", tags=["scraper"])
 
 
 @router.post("/run")

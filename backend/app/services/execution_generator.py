@@ -1,11 +1,8 @@
-import json
-
-from google import genai
 from sqlalchemy.orm import Session
 
-from app.config import settings
 from app.models.execution import Execution
 from app.models.idea import Idea
+from app.services.gemini import call_gemini
 
 PROMPT = """Genera un plan de ejecución MVP para esta oportunidad. Responde SOLO con JSON válido (sin markdown, sin ```):
 
@@ -28,21 +25,15 @@ Sé concreto y práctico. Nada de fantasías.
 
 
 def generate_execution(idea: Idea, db: Session) -> Execution:
-    client = genai.Client(api_key=settings.gemini_api_key)
-
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=PROMPT.format(
+    data = call_gemini(
+        PROMPT.format(
             name=idea.name,
             problem=idea.analysis.problem,
             opportunity=idea.analysis.current_opportunity,
             score=idea.analysis.total_score,
-        ),
+        )
     )
 
-    data = json.loads(response.text)
-
-    # Ensure estimated_days is an integer
     days = data.get("estimated_days", 5)
     if isinstance(days, str):
         days = int(days.split("-")[0])
