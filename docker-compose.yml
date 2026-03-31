@@ -33,5 +33,13 @@ services:
     depends_on:
       - backend
 
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: opportunity_engine_test
+    profiles:
+      - test
+
 volumes:
   pgdata:

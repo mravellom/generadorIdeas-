@@ -14,6 +14,11 @@ export class Dashboard implements OnInit {
   loading = true;
   filter: 'all' | 'analyzed' | 'top' = 'all';
 
+  scraping = false;
+  analyzing = false;
+  executing = false;
+  actionMessage = '';
+
   constructor(private api: ApiService) {}
 
   ngOnInit() {
@@ -42,6 +47,54 @@ export class Dashboard implements OnInit {
   setFilter(filter: 'all' | 'analyzed' | 'top') {
     this.filter = filter;
     this.loadIdeas();
+  }
+
+  runScraper() {
+    this.scraping = true;
+    this.actionMessage = '';
+    this.api.runScraper().subscribe({
+      next: (res) => {
+        this.actionMessage = `Scraper: ${res.count} startups encontradas`;
+        this.scraping = false;
+        this.loadIdeas();
+      },
+      error: () => {
+        this.actionMessage = 'Error al ejecutar scraper';
+        this.scraping = false;
+      },
+    });
+  }
+
+  analyzeAll() {
+    this.analyzing = true;
+    this.actionMessage = '';
+    this.api.analyzeAll().subscribe({
+      next: (res) => {
+        this.actionMessage = `Analizadas: ${res.analyzed} | Errores: ${res.errors}`;
+        this.analyzing = false;
+        this.loadIdeas();
+      },
+      error: () => {
+        this.actionMessage = 'Error al analizar';
+        this.analyzing = false;
+      },
+    });
+  }
+
+  executeAll() {
+    this.executing = true;
+    this.actionMessage = '';
+    this.api.executeAll().subscribe({
+      next: (res) => {
+        this.actionMessage = `Planes generados: ${res.executed} | Errores: ${res.errors}`;
+        this.executing = false;
+        this.loadIdeas();
+      },
+      error: () => {
+        this.actionMessage = 'Error al generar planes';
+        this.executing = false;
+      },
+    });
   }
 
   getScoreBadgeClass(score: number | null | undefined): string {

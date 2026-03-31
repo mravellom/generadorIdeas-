@@ -4,6 +4,22 @@
     <p class="subtitle">{{ ideas.length }} ideas en la base de datos</p>
   </div>
 
+  <div class="actions">
+    <button class="btn-action btn-scraper" (click)="runScraper()" [disabled]="scraping">
+      {{ scraping ? 'Scrapeando...' : 'Scrapear startups.rip' }}
+    </button>
+    <button class="btn-action btn-analyze" (click)="analyzeAll()" [disabled]="analyzing">
+      {{ analyzing ? 'Analizando...' : 'Analizar todas' }}
+    </button>
+    <button class="btn-action btn-execute" (click)="executeAll()" [disabled]="executing">
+      {{ executing ? 'Generando...' : 'Generar MVPs' }}
+    </button>
+  </div>
+
+  @if (actionMessage) {
+    <div class="action-message">{{ actionMessage }}</div>
+  }
+
   <div class="filters">
     <button [class.active]="filter === 'all'" (click)="setFilter('all')">Todas</button>
     <button [class.active]="filter === 'analyzed'" (click)="setFilter('analyzed')">Analizadas</button>

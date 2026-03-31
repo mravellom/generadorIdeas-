@@ -35,4 +35,12 @@ export class ApiService {
   runScraper(): Observable<{ message: string; count: number }> {
     return this.http.post<{ message: string; count: number }>(`${this.baseUrl}/api/scraper/run`, {});
   }
+
+  analyzeAll(): Observable<{ analyzed: number; errors: number; pending: number }> {
+    return this.http.post<{ analyzed: number; errors: number; pending: number }>(`${this.baseUrl}/api/ideas/analyze-all`, {});
+  }
+
+  executeAll(): Observable<{ executed: number; errors: number; pending: number }> {
+    return this.http.post<{ executed: number; errors: number; pending: number }>(`${this.baseUrl}/api/ideas/execute-all`, {});
+  }
 }
